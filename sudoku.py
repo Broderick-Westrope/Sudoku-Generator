@@ -1,17 +1,17 @@
 import csv
 
-
+# This is the symbol used to represent an empty cell when one is not provided on initialization
 DEFAULT_SYMBOL = ' '
 
 
 class Sudoku:
     def __init__(self, defaultSymbol: str = DEFAULT_SYMBOL, importSudoku: bool = False):
-        """Initialises a new soduku with the symbol, defaultSymbol, representing empty cells."""
+        """Initializes a new Sudoku with the symbol, defaultSymbol, representing empty cells."""
         if importSudoku:
             self.importSudoku()
         else:
             self.defaultSymbol = defaultSymbol
-            # Initialises a new, blank sudoku with the standard 81 cells
+            # Initializes a new, blank sudoku with the standard 81 cells
             self.sudoku = [[defaultSymbol for j in range(9)]for i in range(9)]
             self.dim = self.getSudokuDimensions()
 
@@ -31,14 +31,16 @@ class Sudoku:
                 "Given coordinate was not empty. Cannot override a non-empty cell value.")
         invalidValues = set()
         # Add values in the same row to invalid set
-        invalidValues.add(coord[0])
+        invalidValues = invalidValues.union(set(self.sudoku[coord[0]]))
         # Add values in the same column to invalid set
         for row in range(self.dim[1]):
             invalidValues.add(self.sudoku[row][coord[1]])
         # Add values in the same submatrix (3x3 group) to invalid set
-        invalidValues = invalidValues.union(self.getSubmatrixValues(coord))
+        x = self.getSubmatrixValues(coord)
+        invalidValues = invalidValues.union(x)
         # Perform the set difference between the potential and invalid values to produce the valid values
-        return (set(range(1, 10)) - invalidValues)
+        validValues = set([str(x) for x in range(1, 10)])
+        return validValues.difference(invalidValues)
 
     def setCell(self, coord: tuple, value: int):
         """Puts the given value at the given coordinate, coord./"""
@@ -51,16 +53,16 @@ class Sudoku:
     def getSubmatrixValues(self, coord: tuple) -> set:
         """Returns the values in the submatrix (3x3 cell group) of the given coordinate, coord."""
         values = set()
-        for row in range(coord[0]//3, (coord[0]//3)+3):
-            for col in range(coord[1]//3, (coord[1]//3)+3):
+        startingRow = coord[0]-(coord[0] % 3)
+        startingCol = coord[1]-(coord[1] % 3)
+        for row in range(startingRow, startingRow+3):
+            for col in range(startingCol, startingCol+3):
                 values.add(self.sudoku[row][col])
         return values
 
     def printSudoku(self) -> None:
         """Prints the sudoku to the CLI"""
         dim = list(self.dim)
-        # multiples of 8, minus 1
-        # 8m-1
         dim[0] = int(dim[0]+(dim[0]//4))
         val = spacer = 0
         for i in range(dim[0]):
@@ -77,13 +79,13 @@ class Sudoku:
         print('')
 
     def exportSudoku(self):
-        with open('sudoku_data', 'w') as file:
+        with open('problem1', 'w') as file:
             writer = csv.writer(file)
             writer.writerows(self.sudoku)
 
     def importSudoku(self):
         self.sudoku = []
-        with open('sudoku_data', 'r') as file:
+        with open('problem1', 'r') as file:
             reader = csv.reader(file)
             for row in reader:
                 self.sudoku.append(row)
@@ -91,21 +93,31 @@ class Sudoku:
             ValueError("Failed to import sudoku. The result was an empty list.")
         self.dim = self.getSudokuDimensions()
         self.defaultSymbol = DEFAULT_SYMBOL
+        print("x=" + str(self.defaultSymbol) + "|")
         for row in range(self.dim[0]):
             for col in range(self.dim[1]):
-                if type(self.sudoku[row][col]) != int:
+                if not isinstance(self.sudoku[row][col], int) and not str.isdigit(self.sudoku[row][col]):
                     self.defaultSymbol = self.sudoku[row][col]
+                    break
         print("Import Successful:")
         self.printSudoku()
+        print("Empty Symbol: |" + str(self.defaultSymbol + "|"))
 
-# 1 2 3 | 1 2 3 | 1 2 3
-# 1 2 3 | 1 2 3 | 1 2 3
-# 1 2 3 | 1 2 3 | 1 2 3
-# ------+-------+------
-# 1 2 3 | 1 2 3 | 1 2 3
-# 1 2 3 | 1 2 3 | 1 2 3
-# 1 2 3 | 1 2 3 | 1 2 3
-# ------+-------+------
-# 1 2 3 | 1 2 3 | 1 2 3
-# 1 2 3 | 1 2 3 | 1 2 3
-# 1 2 3 | 1 2 3 | 1 2 3
+    def isSolved(self) -> bool:
+        for row in range(self.dim[0]):
+            for col in range(self.dim[1]):
+                if not str.isdigit(str(self.sudoku[row][col])):
+                    return False
+        return True
+
+        # 1 2 3 | 1 2 3 | 1 2 3
+        # 1 2 3 | 1 2 3 | 1 2 3
+        # 1 2 3 | 1 2 3 | 1 2 3
+        # ------+-------+------
+        # 1 2 3 | 1 2 3 | 1 2 3
+        # 1 2 3 | 1 2 3 | 1 2 3
+        # 1 2 3 | 1 2 3 | 1 2 3
+        # ------+-------+------
+        # 1 2 3 | 1 2 3 | 1 2 3
+        # 1 2 3 | 1 2 3 | 1 2 3
+        # 1 2 3 | 1 2 3 | 1 2 3
