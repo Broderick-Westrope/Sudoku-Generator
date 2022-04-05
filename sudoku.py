@@ -1,10 +1,19 @@
+import csv
+
+
+DEFAULT_SYMBOL = ' '
+
+
 class Sudoku:
-    def __init__(self, defaultSymbol: str = '?'):
+    def __init__(self, defaultSymbol: str = DEFAULT_SYMBOL, importSudoku: bool = False):
         """Initialises a new soduku with the symbol, defaultSymbol, representing empty cells."""
-        # Initialises a new, blank sudoku with the standard 81 cells
-        self.defaultSymbol = defaultSymbol
-        self.sudoku = [[defaultSymbol for j in range(9)]for i in range(9)]
-        self.dim = self.getSudokuDimensions()
+        if importSudoku:
+            self.importSudoku()
+        else:
+            self.defaultSymbol = defaultSymbol
+            # Initialises a new, blank sudoku with the standard 81 cells
+            self.sudoku = [[defaultSymbol for j in range(9)]for i in range(9)]
+            self.dim = self.getSudokuDimensions()
 
     def getEmptyCellIndices(self) -> list:
         """Returns a list of tuples, each of which is a coordinate for an empty cell within the sudoku."""
@@ -67,6 +76,27 @@ class Sudoku:
             print('')
         print('')
 
+    def exportSudoku(self):
+        with open('sudoku_data', 'w') as file:
+            writer = csv.writer(file)
+            writer.writerows(self.sudoku)
+
+    def importSudoku(self):
+        self.sudoku = []
+        with open('sudoku_data', 'r') as file:
+            reader = csv.reader(file)
+            for row in reader:
+                self.sudoku.append(row)
+        if len(self.sudoku) <= 0:
+            ValueError("Failed to import sudoku. The result was an empty list.")
+        self.dim = self.getSudokuDimensions()
+        self.defaultSymbol = DEFAULT_SYMBOL
+        for row in range(self.dim[0]):
+            for col in range(self.dim[1]):
+                if type(self.sudoku[row][col]) != int:
+                    self.defaultSymbol = self.sudoku[row][col]
+        print("Import Successful:")
+        self.printSudoku()
 
 # 1 2 3 | 1 2 3 | 1 2 3
 # 1 2 3 | 1 2 3 | 1 2 3
