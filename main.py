@@ -17,7 +17,7 @@ def menu() -> None:
 
 def createSudoku() -> None:
     """Allows the user to create a standard 81 cell sudoku with their given number of clues filled in."""
-    s = Sudoku(importSudoku=True)
+    s = Sudoku()
     # result = badGenerator(s, 17)
     # s.exportSudoku()
     bruteForceGenerator.generate(s)

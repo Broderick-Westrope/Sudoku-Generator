@@ -14,10 +14,10 @@ def generate(sudoku: Sudoku(), clues: int = 17) -> None:
 
 
 def bruteForceGenerator(s: Sudoku()) -> bool or None:
-    """Brute-force recursive generator. Creates a sudoku, s, with clues through use of random selections and brute-force backtracking. Returns a Sudoku when a solution is found, otherwise returns None."""
+    """Brute-force recursive generator. Creates a sudoku, s, with clues through use of random selections and brute-force backtracking. Returns True when a solution is found, otherwise returns None."""
     system("cls")
     s.printSudoku()
-    # If true, we have solved the system and need to return the result
+    # If true, we have solved the system and need to return True
     if s.isSolved():
         return True
     for row in range(s.dim[0]):
