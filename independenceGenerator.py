@@ -1,3 +1,6 @@
+# This is a minor adaption of what I call the 'independence algorithm' (due to the 3 diagonal submatrices being independent of eachother) published here:
+# GeeksForGeeks - https://www.geeksforgeeks.org/program-sudoku-generator/
+
 from sudoku import Sudoku
 from random import shuffle
 from os import system

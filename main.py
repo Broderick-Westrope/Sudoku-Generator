@@ -2,6 +2,7 @@ from __future__ import annotations
 from sudoku import Sudoku
 from random import choice
 import bruteForceGenerator
+import crooksGenerator
 
 
 def menu() -> None:
@@ -17,10 +18,11 @@ def menu() -> None:
 
 def createSudoku() -> None:
     """Allows the user to create a standard 81 cell sudoku with their given number of clues filled in."""
-    s = Sudoku()
+    s = Sudoku(importSudoku=True)
     # result = badGenerator(s, 17)
     # s.exportSudoku()
-    bruteForceGenerator.generate(s)
+    # bruteForceGenerator.generate(s)
+    crooksGenerator.generate(s)
     s.printSudoku()
 
 

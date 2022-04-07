@@ -40,7 +40,7 @@ class Sudoku:
         invalidValues = invalidValues.union(x)
         # Perform the set difference between the potential and invalid values to produce the valid values
         validValues = set([str(x) for x in range(1, 10)])
-        return validValues.difference(invalidValues)
+        return list(validValues.difference(invalidValues))
 
     def setCell(self, coord: tuple, value: int):
         """Puts the given value at the given coordinate, coord./"""
@@ -85,7 +85,7 @@ class Sudoku:
 
     def importSudoku(self):
         self.sudoku = []
-        with open('problem1', 'r') as file:
+        with open('crooksTest', 'r') as file:
             reader = csv.reader(file)
             for row in reader:
                 self.sudoku.append(row)
