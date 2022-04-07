@@ -13,7 +13,7 @@ For major changes, please open an issue first to discuss what you would like to 
 I have done my best to cite the creator of certain algorithms (such as Crooks Algorithm) although if you are the creator of one and are not referenced then feel free to contact me and I can update the repo.
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[GNU General Public License v3.0](https://choosealicense.com/licenses/gpl-3.0/)
 
 ## References
 - [WY Fok's write-up on Crooks Algorithm (my original source)](https://towardsdatascience.com/solve-sudoku-more-elegantly-with-crooks-algorithm-in-python-5f819d371813)
