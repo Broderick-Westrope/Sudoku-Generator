@@ -62,19 +62,31 @@ class Sudoku:
 
     def printSudoku(self) -> None:
         """Prints the sudoku to the CLI"""
+        # Get a list version of the sudoku's dimensions and increase the rows to account for horizontal spacers
         dim = list(self.dim)
         dim[0] = int(dim[0]+(dim[0]//4))
-        val = spacer = 0
-        for i in range(dim[0]):
-            for j in range(dim[1]):
-                if (i+1)/4 == (i+1)//4 and i != dim[0]-1:
-                    val, spacer = "--", "-+"
-                else:
-                    val, spacer = ' ' + str(self.sudoku[i-(i//4)][j]), " |"
+        for colMarker in range(dim[0]):
+            # Prints the spacing between column markers, the first needs to account for the row markers
+            print("    " if colMarker == 0 else " ", end='')
+            # Checks whether the row is a spacer, and prints row marker if it is not
+            rowSpacerCheck = (colMarker+1)/4 == (colMarker + 1)//4 and colMarker != dim[0]-1
+            print(" " if rowSpacerCheck else str(colMarker-(colMarker//4)), end='')
+        # Print the row spacer for column markers
+        for rowSpacerCheck in range(dim[0]):
+            print('\n  +--' if rowSpacerCheck == 0 else "--", end='')
+        print('')
+        for row in range(dim[0]):
+            # Print the row markers whenever we are not printing a row spacer
+            rowSpacerCheck = (row+1)/4 == (row+1)//4 and row != dim[0]-1
+            print('  |' if rowSpacerCheck else str(row-(row//4)) + ' |', end='')
+            for col in range(dim[1]):
+                # Print the sudoku values whenever we are not printing a row spacer
+                rowSpacerCheck = (row+1)/4 == (row+1)//4 and row != dim[0]-1
+                val, spacer = ("--", "-+") if rowSpacerCheck else (' ' + str(self.sudoku[row-(row//4)][col]), " |")
                 print(val, end='')
-                if (j+1)/3 == (j+1)//3 and j != dim[1]-1:
+                # Print the column spacer
+                if (col+1)/3 == (col+1)//3 and col != dim[1]-1:
                     print(spacer, end='')
-
             print('')
         print('')
 
